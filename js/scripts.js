@@ -6,7 +6,7 @@ function loadLink(url)
     		let chaine = '';
     		console.log(data);
 	        console.log("ok");
-	        chaine += '<video controls=""  name="media" src="http://localhost:1234" type="video/ogg;" width="700">';
+	        chaine += '<video controls=""  name="media" src="http://localhost:'+data+'" type="video/ogg;" width="700">';
 	        chaine += '</video>';
 			$('#content').empty();
 			$('#content').append(chaine);
