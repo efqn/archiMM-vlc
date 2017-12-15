@@ -4,13 +4,14 @@
     <head>
         <title>Players</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <link rel="stylesheet" href="./css/style.css">
     </head>
 
     <script src="./js/scripts.js" type="text/javascript"></script>
 
     <body>
-        <div>
+        <!--<div>
              <iframe id="U2BE" width="420" height="315"
                 src="https://www.youtube.com/embed/YSgpU70MZno?loop=1">
              </iframe> 
@@ -25,9 +26,15 @@
         <video controls="" autoplay="" name="media">
             <source src="http://185.52.127.159/fr/30611/mp3_128.mp3?origine=fluxradios" type="audio/mpeg">
         </video>
+        <video controls=""  name="media" src="http://localhost:1234" type="video/ogg;" width="700">
+        </video>-->
+        <button type="button" onclick='loadLink("/home/norabbit/Téléchargements/yourNameOST.mp4");'>LOCAL</button>
+        <button type="button" onclick='loadLink("https://www.youtube.com/watch?v=5mmQeb8mXVk");'>By URL</button>
+        <div id="content">
+        </div><!--
     <br>
         <iframe src="https://player.twitch.tv/?channel=iwabi74" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620">
-        </iframe>
+        </iframe>-->
     </body>
     
 </html>
