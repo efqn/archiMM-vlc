@@ -1,6 +1,16 @@
+var id = 0;
+
+function start()
+{
+	$.get("./load",(data) => {
+		id = data;
+		console.log("id : "+id);
+	});
+}
+
 function loadLink(url)
 {
-	$.post("./loadVLC",{data:url},(data) =>{
+	$.post("./loadVLC",{data:url,cliendID : id},(data) =>{
         
         setTimeout(function(){
     		let chaine = '';
@@ -14,3 +24,9 @@ function loadLink(url)
         
     });
 }
+
+$(window).bind("beforeunload",{cliendID : id}, function() { 
+    $.post("./closeVLC",(data)=>{
+    	
+    }); 
+});
