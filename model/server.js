@@ -12,6 +12,7 @@ let server_ports  = [];
 let pids 		  = [];
 let client_id    = [];
 const ports_range = 16383;	// 65535 - 49152
+const ports_offset = 49152;
 
 class Server {
 
@@ -41,10 +42,8 @@ class Server {
 				code.on("error", function(err){
 					console.log("ok");
 				});
-				console.log(pids[req.body.clientID]);
 				pids[req.body.clientID] = 0;
-				console.log("work");
-				server_ports[req.body.data] = 0;
+				server_ports[req.body.data - ports_offset] = 0;
 				console.log("closing port "+req.body.data);
 			}
 		});
@@ -65,12 +64,12 @@ class Server {
 			let id = 49152;
 			let i = 0;
 			console.log("searching available id...");
-			while(server_ports[i] != 0 && i<ports_range) {
+			while(client_id[i] != 0 && i<ports_range) {
 				i++;
 			}
 			if( i < ports_range) {
 				client_id[i] = 1;
-				res.end(""+client_id[i]);
+				res.end(""+ i);
 				console.log("available id found");
 			}
 			else {
@@ -80,7 +79,6 @@ class Server {
 
 		this.server.post('/loadVLC', (req, res) => {
 
-			let port = 49152;
 			let i = 0;
 			console.log("searching available port...");
 			while(server_ports[i] != 0 && i<ports_range) {
@@ -88,14 +86,15 @@ class Server {
 			}
 			if( i < ports_range) {
 				server_ports[i] = 1;
-				let port_selected = i+port;
+				let port_selected = i+ ports_offset;
 				console.log("port selected : "+port_selected);
 				let code = spawn('vlc' , [req.body.data,':sout=#transcode{vcodec=theo,vb=800,scale=1,acodec=vorb,ab=128,channels=2,samplerate=44100}:http{mux=ogg,dst=:'+port_selected+'/}',':sout-keep'], {
 					detached : true,
 					stdio : 'ignore'
 				});
 				pids[req.body.clientID] = code.pid;
-				//console.log(code);
+				console.log(req.body.clientID);
+				console.log(code.pid);
 				res.end(""+port_selected);
 			}
 			else {

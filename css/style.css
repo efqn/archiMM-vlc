@@ -11,7 +11,7 @@ body{
     background-color: #c4302b;
     box-shadow: 0px 3px 5px #888888;
     overflow:hidden;
-    z-index: 2;
+    z-index: 4;
 }
 
 #logo {
@@ -275,4 +275,31 @@ body{
 #responses{
 	font-family: Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
 	font-weight: bold;
+}
+#vidPage{
+	display : none;
+	position : fixed;
+    height : 100vh;
+    width : 100vw;
+    top : 0vh;
+    left : 0vw;
+    z-index : 2;
+    background-color : rgba(0,0,0, 0.8);
+    animation-name: blackScreen;
+    animation-duration : 2s;
+}
+
+@keyframes reduceLeftMenu {
+    from {width: 15vw;}
+    to {width: 0vw;}
+}
+
+@keyframes increaseLeftMenu {
+    from {width: 0vw;}
+    to {width: 15vw;}
+}
+
+@keyframes blackScreen {
+    from {background-color : rgba(0,0,0, 0.0);}
+    to {background-color : rgba(0,0,0, 0.8);}
 }
