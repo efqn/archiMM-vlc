@@ -826,24 +826,82 @@ function countAndload(recherche,url)
 
 function loadLink(url)
 {
-    $.post("./loadVLC",{data:url,cliendID : id},(data) =>{
+    $.post("./loadVLC",{data:url,clientID : id},(data) =>{
         
         setTimeout(function(){
             let chaine = '';
+<<<<<<< HEAD
             console.log(data);
             console.log("ok");
             port = data;
             chaine += '<video controls=""  autoplay name="media" src="http://localhost:'+data+'" type="video/ogg;" width="700">';
+=======
+            chaine += '<div id="leftVideoDisplay" onClick=\'unLoadLink();\'>';
+            chaine += '</div>';
+            chaine += '<video controls="" id="popUp" autoplay name="media" src="http://localhost:'+data+'" type="video/ogg;">';
+>>>>>>> fcf63f9dfb6e4ebffb7a3f6d943b2e70d34c94fe
             chaine += '</video>';
-            $('#content').empty();
-            $('#content').append(chaine);
+            chaine += '<div id="rightVideoDisplay" onClick=\'unLoadLink();\'>';
+            chaine += '</div>';
+            
+            $('#vidPage').append(chaine);
+
+            $('#leftVideoDisplay').css('position','fixed');
+            $('#leftVideoDisplay').css('height','90vh');
+            $('#leftVideoDisplay').css('width','15vw');
+            $('#leftVideoDisplay').css('top','10vh');
+            $('#leftVideoDisplay').css('left','0vw');
+            $('#leftVideoDisplay').css('z-index','3');
+
+            $('#rightVideoDisplay').css('position','fixed');
+            $('#rightVideoDisplay').css('height','90vh');
+            $('#rightVideoDisplay').css('width','15vw');
+            $('#rightVideoDisplay').css('top','10vh');
+            $('#rightVideoDisplay').css('left','85vw');
+            $('#rightVideoDisplay').css('z-index','3');
+
+            $('#popUp').css('display','block');
+            $('#popUp').css('position','relative');
+            $('#popUp').css('height','70vh');
+            $('#popUp').css('width','70vw');
+            $('#popUp').css('margin-left','15vw');
+            $('#popUp').css('margin-top','15vh');
+            $('#popUp').css('z-index','3');
+
+            $('#leftmenu').css('animation-name','reduceLeftMenu');
+            $('#leftmenu').css('animation-duration','2s');
+            $('#leftmenu').css('width','0vw');
+
+            $('#left').css('animation-name','reduceLeftMenu');
+            $('#left').css('animation-duration','2s');
+            $('#left').css('width','0vw');
+
+            $('#vidPage').css('display','block');
+            port = data;
+
         }, 2000);
         
     });
 }
 
+
+function unLoadLink()
+{
+    $('#leftmenu').css('animation-name','increaseLeftMenu');
+    $('#leftmenu').css('animation-duration','2s');
+    $('#leftmenu').css('width','15vw');
+    $('#left').css('animation-name','increaseLeftMenu');
+    $('#left').css('animation-duration','2s');
+    $('#left').css('width','15vw');
+    $('#vidPage').empty();
+    $('#vidPage').css('display','none');
+    $.post("./closeVLC",{clientID : id, data : port} ,(data)=>{
+        
+    });
+}
+
 $(window).unload(function() { 
-    $.post("./closeVLC",{cliendID : id, port: port}, (data)=>{
+    $.post("./closeVLC",{clientID : id, data : port},(data)=>{
         
     }); 
 });

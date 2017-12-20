@@ -1,0 +1,28 @@
+--------------    Notes    -----------------------------
+
+Le serveur tourne avec NodeJS, les tests sont effectués en localhost.
+On utilise les ports allant du 49152 au 65535eme (c'est des ports libres)
+pour diffusion des vidéos depuis vlc 
+
+-----------------------------------------------------------
+
+19/12/2017
+  - Travail sur la fermuture des instances de vlc en meme temps que la fermuture
+  	de la fenetre du navigateur
+  - Il y a un problème du fait que lorsqu'on ouvre un instance de vlc,
+  	le processus est lié au meme shell que le serveur. Ce qui rendait rendait impossible
+  	le kill de l'instance au meme moment que l'execution du process principal
+
+20/12/2017
+   - Problème réglé, le processus vlc est maintenant détaché du shell
+     sur lequel le serveur tourne
+
+   - Travail sur l'intégration avec "Youtube big data"
+   - sur ubuntu 16.0.4 lts: un probleme de compatibilité a été détecté. Nous l'avons résolu :
+   		- installer les package mariadb-server et mariadb-client (au lieu du package mysql) (pas de mots de passe pour toute les étapes)
+   		- taper "mysql_secure_installation" et suivre les indications (nous avons laissé toutes les valeurs par défaut)
+   		- ouvrir un invite de commande mysql en tapant "sudo mysql -u root" et entrer les lignes suivantes :
+   			use mysql;
+			update user set authentication_string=password(''), plugin='mysql_native_password' where user='root';
+
+	- Ajout d'un mode cinéma lorsque l'on ouvre un lien vidéo
