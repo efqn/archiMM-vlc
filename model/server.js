@@ -35,7 +35,7 @@ class Server {
 		this.server.post('/closeVLC', (req,res) => {
 			if(pids[req.body.clientID] !=0)
 			{
-				code = spawn('kill' + pids[req.body.clientID]);
+				code = spawn('kill', [pids[req.body.clientID]]);
 				code.on("error", function(err){
 					console.log("ok");
 				});
@@ -88,12 +88,12 @@ class Server {
 				server_ports[i] = 1;
 				let port_selected = i+port;
 				console.log("port selected : "+port_selected);
-				let code = spawn('vlc' , [req.body.data + ' :sout=#transcode{vcodec=theo,vb=800,scale=1,acodec=vorb,ab=128,channels=2,samplerate=44100}:http{mux=ogg,dst=:'+port_selected+'/} :sout-keep'], {
+				let code = spawn('vlc' , [req.body.data,':sout=#transcode{vcodec=theo,vb=800,scale=1,acodec=vorb,ab=128,channels=2,samplerate=44100}:http{mux=ogg,dst=:'+port_selected+'/}',':sout-keep'], {
 					detached : true,
 					stdio : 'ignore'
 				});
 				pids[req.body.clientID] = code.pid;
-				console.log(code);
+				//console.log(code);
 				res.end(""+port_selected);
 			}
 			else {
