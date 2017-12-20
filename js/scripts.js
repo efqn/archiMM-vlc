@@ -11,6 +11,7 @@ var displayPublish;
 var displayDescription;
 var response ;
 var id = 0;
+var port = 0;
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -831,6 +832,7 @@ function loadLink(url)
             let chaine = '';
             console.log(data);
             console.log("ok");
+            port = data;
             chaine += '<video controls=""  autoplay name="media" src="http://localhost:'+data+'" type="video/ogg;" width="700">';
             chaine += '</video>';
             $('#content').empty();
@@ -840,8 +842,8 @@ function loadLink(url)
     });
 }
 
-$(window).bind("beforeunload",{cliendID : id}, function() { 
-    $.post("./closeVLC",(data)=>{
+$(window).unload(function() { 
+    $.post("./closeVLC",{cliendID : id, port: port}, (data)=>{
         
     }); 
 });
