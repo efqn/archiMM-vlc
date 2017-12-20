@@ -1,6 +1,8 @@
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const sql = require('./sql');
 const spawn = require('child_process').spawn;
 
 let sess;
@@ -16,10 +18,10 @@ class Server {
 	constructor() {
 		
 		this.server = express();
+		this.server.use(session({secret: 'ytb-big-data'}));
 		this.server.use(bodyParser.json());
 		this.server.use(bodyParser.urlencoded({extended: true}));
 
-		// ports disponibles, pids & client_id
 		for(var i=0; i<ports_range; i++) {
 			server_ports.push(0);
 			pids.push(0);
@@ -29,7 +31,7 @@ class Server {
 		this.server.get('/', (req, res) => {
 			sess = req.session;
 			res.send(fs.readFileSync('./view/index.html', 'utf8'));
-			//code = execSync('vlc /home/norabbit/Téléchargements/yourNameOST.mp4 :sout=#transcode{vcodec=theo,vb=800,scale=1,acodec=vorb,ab=128,channels=2,samplerate=44100}:http{mux=ogg,dst=:1234/} :sout-keep');
+
 		});
 
 		this.server.post('/closeVLC', (req,res) => {
@@ -42,8 +44,8 @@ class Server {
 				console.log(pids[req.body.clientID]);
 				pids[req.body.clientID] = 0;
 				console.log("work");
-				/*server_ports[req.body.data] = 0;
-				console.log("closing port "+req.body.data);*/
+				server_ports[req.body.data] = 0;
+				console.log("closing port "+req.body.data);
 			}
 		});
 
@@ -101,7 +103,55 @@ class Server {
 			}
 		});
 
+		this.server.get('/loged', (req,res) => {
+			sess = req.session;
+			if(sess.email) {
+			    res.end('Already');
+			}
+			else {
+				res.end('done');
+			    
+			}
+		});
+		this.server.post('/login', (req, res) => {
+			sess = req.session;
+			sql.selectUser(req.body.email,req.body.pass,(data) =>{
+				if (typeof data[0] !== "undefined")
+				{
+					sess.email = req.body.email;
+					res.end('done');
+				}
+				else{
+					res.end('Erreur');
+				}
+			});
+		});
+
+		this.server.get('/logout',(req,res) => {
+			req.session.destroy(function(err) {
+			  if(err) {
+			    console.log(err);
+			  } else {
+			    res.end('done');
+			  }
+			});
+		});
+
+		this.server.post('/configwrite', function(req, res) {
+		    var body = req.body.data;
+		    var filePath = './model/config.txt';
+		    fs.writeFile(filePath, body, function() {
+		    	res.end();
+		    });
+		});
+
 		this.server.use('/js', express.static('./js'));
+
+		this.server.use('/config.txt', express.static('./model/config.txt'));
+
+		this.server.use('/write.php', express.static('./model/write.php'));
+
+		this.server.use('/quizz.txt', express.static('./model/quizz.txt'));
 
 		this.server.use('/css', express.static('./css'));
 
