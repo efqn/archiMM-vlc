@@ -37,6 +37,13 @@ class MySQL {
 			cb(results);
 		})
 	}
+	createCom(vidId,auteur,date,second,text,callback)
+	{
+		connection.query('INSERT INTO commentaires (vidId,auteur,date,second,text) VALUES (?, ?, ?, ? ,?)', [vidId,auteur,date,second,text], function(err,result){
+			if (err) throw err
+				console.log("Insersion Done");
+		})
+	}
 }
 
 module.exports = new MySQL();

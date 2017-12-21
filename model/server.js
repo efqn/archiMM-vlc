@@ -143,6 +143,10 @@ class Server {
 		    });
 		});
 
+		this.server.post('/addCom', (req,res) =>{
+			sql.createCom(req.body.vidId , req.body.auteur,req.body.date,req.body.second,req.body.text);
+		});
+
 		this.server.use('/js', express.static('./js'));
 
 		this.server.use('/config.txt', express.static('./model/config.txt'));

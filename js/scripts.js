@@ -830,16 +830,11 @@ function loadLink(url)
         
         setTimeout(function(){
             let chaine = '';
-<<<<<<< HEAD
-            console.log(data);
-            console.log("ok");
             port = data;
-            chaine += '<video controls=""  autoplay name="media" src="http://localhost:'+data+'" type="video/ogg;" width="700">';
-=======
+
             chaine += '<div id="leftVideoDisplay" onClick=\'unLoadLink();\'>';
             chaine += '</div>';
             chaine += '<video controls="" id="popUp" autoplay name="media" src="http://localhost:'+data+'" type="video/ogg;">';
->>>>>>> fcf63f9dfb6e4ebffb7a3f6d943b2e70d34c94fe
             chaine += '</video>';
             chaine += '<div id="rightVideoDisplay" onClick=\'unLoadLink();\'>';
             chaine += '</div>';
