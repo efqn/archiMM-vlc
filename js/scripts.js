@@ -637,6 +637,7 @@ function setQuizz()
     }
 
     self.getQuizz().then(function(data){
+        console.log("here");
         response = 0;
         let question;
         let reponse;
@@ -713,11 +714,12 @@ function start(recherche,pageToken)
     });
 }
 
-function addVidCount(recherche)
+function addVidCount(recherche,url)
 {
     if(getCookie(recherche)=="")
     {
         setCookie(recherche,1,10);
+        loadLink(url);
     }
     else
     {
@@ -727,15 +729,25 @@ function addVidCount(recherche)
         {
             wouldYouQuizz(recherche);
         }
+        else
+        {
+            loadLink(url);
+        }
     }
+}
+
+function refuseQuizz()
+{
+    $('#page1').remove();
+    $('#popUp').remove();
 }
 
 function wouldYouQuizz(recherche)
 {
     let chaine ="";
-    chaine += '<div id=page></div>'
+    chaine += '<div id=page1></div>'
     chaine += '<div id="popUp">Voulez-vous faire un Quizz sur :' + recherche + '?<br>' ;
-    chaine += '<button id="Oui" type="button">Oui</button> <button id="Non" type="button">Non</button>';
+    chaine += '<button id="Oui" type="button" onclick=\'setQuizz()\'>Oui</button> <button id="Non" type="button" onClick=\'refuseQuizz()\'>Non</button>';
     chaine += '</div>';
 
     $('#content').append(chaine);
@@ -771,13 +783,13 @@ function wouldYouQuizz(recherche)
     $('#Non').css('display',' inline-block');
     $('#Non').css('color','white');
     $('#Non').css('font-size', '3vh');
-    $('#page').css('position','fixed');
-    $('#page').css('height','100vh');
-    $('#page').css('width','100vw');
-    $('#page').css('top','0vh');
-    $('#page').css('left','0vw');
-    $('#page').css('z-index','2');
-    $('#page').css('background-color','rgba(255,255,255, 0.5)');
+    $('#page1').css('position','fixed');
+    $('#page1').css('height','100vh');
+    $('#page1').css('width','100vw');
+    $('#page1').css('top','0vh');
+    $('#page1').css('left','0vw');
+    $('#page1').css('z-index','2');
+    $('#page1').css('background-color','rgba(255,255,255, 0.5)');
 }
 
 function logPage()
@@ -820,8 +832,8 @@ function logoutPage()
 
 function countAndload(recherche,url)
 {
-    addVidCount(recherche);
-    loadLink(url);
+    addVidCount(recherche,url);
+    
 }
 
 function loadLink(url)
@@ -876,7 +888,7 @@ function loadLink(url)
             $('#vidPage').css('display','block');
             port = data;
 
-        },    
+        },2000    
     );  
     });
 }
