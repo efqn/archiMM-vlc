@@ -826,6 +826,7 @@ function countAndload(recherche,url)
 
 function loadLink(url)
 {
+
     $.post("./loadVLC",{data:url,clientID : id},(data) =>{
         
         setTimeout(function(){
@@ -838,6 +839,7 @@ function loadLink(url)
             chaine += '</video>';
             chaine += '<div id="rightVideoDisplay" onClick=\'unLoadLink();\'>';
             chaine += '</div>';
+            chaine += '<button onClick = \'addCom("youtube.com")\' style = "margin-left: 30vw;"> AddCommentaire</button>';
             
             $('#vidPage').append(chaine);
 
@@ -874,8 +876,8 @@ function loadLink(url)
             $('#vidPage').css('display','block');
             port = data;
 
-        }, 2000);
-        
+        },    
+    );  
     });
 }
 
@@ -895,8 +897,16 @@ function unLoadLink()
     });
 }
 
-$(window).unload(function() { 
-    $.post("./closeVLC",{clientID : id, data : port},(data)=>{
-        
+
+function addCom(url)
+{
+    $.post("./addCom",{vidId : url,auteur : 'Jean-Pierre',date : '21 decembre 2017',second : 10 ,text : 'Wesh cordialement bisoux'},(data)=>{    
+    });
+}
+
+
+$(window).bind("beforeunload", function() {
+
+    $.post("./close",{clientID : id, data : port},(data)=>{    
     }); 
 });

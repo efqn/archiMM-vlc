@@ -2,7 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-//const sql = require('./sql');
+const sql = require('./sql');
 const spawn = require('child_process').spawn;
 
 let sess;
@@ -48,13 +48,19 @@ class Server {
 			}
 		});
 
-		this.server.get('/close', (req,res) => {
+		this.server.post('/close', (req,res) => {
 			if(client_id[req.body.clientID] == 1)
 			{
+				console.log("Closing client "+req.body.clientID);
 				if(pids[req.body.clientID] !=0)
 				{
-					//code = exec('kill ' + pids[req.body.clientID]);
+					code = spawn('kill', [pids[req.body.clientID]]);
+					code.on("error", function(err){
+						console.log("ok");
+					});
 					pids[req.body.clientID] = 0;
+					server_ports[req.body.data - ports_offset] = 0;
+					console.log("closing port "+req.body.data);
 				}
 				client_id[req.body.clientID] = 0;
 			}
@@ -144,7 +150,13 @@ class Server {
 		});
 
 		this.server.post('/addCom', (req,res) =>{
-			sql.createCom(req.body.vidId , req.body.auteur,req.body.date,req.body.second,req.body.text);
+			sql.createCom(req.body.vidId , req.body.auteur,req.body.date,req.body.second,req.body.text,(data)=>{
+				if(data == "Insertion Done")
+				{
+					console.log("ok");
+					res.end('done');
+				}
+			});
 		});
 
 		this.server.use('/js', express.static('./js'));

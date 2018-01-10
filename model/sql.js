@@ -41,7 +41,7 @@ class MySQL {
 	{
 		connection.query('INSERT INTO commentaires (vidId,auteur,date,second,text) VALUES (?, ?, ?, ? ,?)', [vidId,auteur,date,second,text], function(err,result){
 			if (err) throw err
-				console.log("Insersion Done");
+				callback("Insersion Done");
 		})
 	}
 }
